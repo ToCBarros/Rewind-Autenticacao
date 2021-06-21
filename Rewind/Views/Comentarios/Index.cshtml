@@ -1,0 +1,73 @@
+﻿@model IEnumerable<Rewind.Models.Comentarios>
+
+@{
+    ViewData["Title"] = "Comentarios";
+}
+
+<h1>Lista de Comentarios</h1>
+
+<p>
+@*É enviado o Id da série para o controlador dos comentarios para a função create*@
+@if (User.Identity.IsAuthenticated && ViewBag.ex == "nexiste")
+{
+<a asp-action="Create" asp-controller="Comentarios" asp-route-id="@ViewBag.serie">Adicionar um comentário</a><br />
+}
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Utilizador)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Serie)
+            </th>
+            <th hidden>
+                @Html.DisplayNameFor(model => model.Estado)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Data)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Comentario)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Estrelas)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Utilizador.Utilizador)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Serie.Titulo)
+            </td>
+            <td hidden>
+                @Html.DisplayFor(modelItem => item.Estado)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Data)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Comentario)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Estrelas)
+            </td>
+            <td>
+                @if (ViewBag.util == item.UtilizadoresID) {
+                    <text>
+                <a asp-action="Edit" asp-route-id="@item.ID">Editar</a> |
+                <a asp-action="Details" asp-route-id="@item.ID">Detalhes</a> |
+                <a asp-action="Delete" asp-route-id="@item.ID">Apagar</a>
+                    </text>
+                }
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

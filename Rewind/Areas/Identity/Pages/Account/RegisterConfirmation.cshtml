@@ -1,0 +1,26 @@
+﻿@page
+@model RegisterConfirmationModel
+@{
+    ViewData["Title"] = "Confirmar Registo";
+}
+
+<h1>@ViewData["Title"]</h1>
+@{
+    if (@Model.DisplayConfirmAccountLink)
+    {
+        <p>
+            @*https://aka.ms/aspaccountconf*@
+            Visto que este site ainda não contem confirmação de email.
+            @*Normalmente seria enviado email: <a id="confirm-link" href="@Model.EmailConfirmationUrl">Clique aqui para confirmar a conta.</a>*@
+            O seu email será confirmado automáticamente.
+
+        </p><br />
+        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">OK</a>
+    }
+    else
+    {
+        <p>
+            @*Por favor verifique o email, para confirmar a conta.*@
+        </p>
+    }
+}

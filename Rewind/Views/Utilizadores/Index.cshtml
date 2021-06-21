@@ -1,0 +1,55 @@
+﻿@model IEnumerable<Rewind.Models.Utilizadores>
+
+@{
+    ViewData["Title"] = "Indice";
+}
+
+<h1>Indice de utilizadores</h1>
+
+@*
+<p>
+    <a asp-action="Create">Criar novo</a>
+</p>*@
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Utilizador)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.UserName)
+            </th>*@
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Utilizador)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            @*<td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>*@
+            
+            <td>
+                @if (ViewBag.id == item.UserName && item.UserName != null)
+                {
+                <text>
+                <a asp-action="Edit" asp-route-id="@item.ID">Editar</a> |
+                <a asp-action="Details" asp-route-id="@item.ID">Detalhes</a> |
+                <a asp-action="Delete" asp-route-id="@item.ID">Apagar</a>
+                </text>
+                }
+            </td>
+            
+        </tr>
+}
+    </tbody>
+</table>
