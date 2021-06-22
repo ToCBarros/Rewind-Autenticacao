@@ -2,6 +2,8 @@
 
 @{
     ViewData["Title"] = "Séries";
+    int i = 1;
+    string nome = "#portfolioModal";
 }
 
 <h1>Lista de Séries</h1>
@@ -12,6 +14,7 @@
         <a asp-action="Create">Adicionar nova série</a>
     }
 </p>
+@*
 <table class="table">
     <thead>
         <tr>
@@ -42,9 +45,78 @@
             <th></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody>*@
 @foreach (var item in Model) {
-        <tr>
+    nome = "#portfolioModal";
+    <div class="col-lg-4 col-sm-6 mb-4">
+        <div class="portfolio-item">
+                            <a class="portfolio-link" data-bs-toggle="modal" href="@nome@i">
+                                <div class="portfolio-hover">
+                                    <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
+                                </div>
+                                <img width="300" alt="300" class="img-fluid" src="~/fotos/@Html.DisplayFor(modelItem => item.Imagem)" alt="..." />
+                            </a>
+                            <div class="portfolio-caption">
+                                <div class="portfolio-caption-heading">@Html.DisplayFor(modelItem => item.Titulo)</div>
+                            </div>
+                        </div><br />
+    </div>    
+    
+        nome = "portfolioModal";
+    
+    <div class="portfolio-modal modal fade" id="@nome@i" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <div class="modal-body">
+                                    <!-- Project details-->
+                                    <h2 class="text-uppercase">@Html.DisplayFor(modelItem => item.Titulo)</h2>
+                                    <p class="item-intro text-muted">@Html.DisplayFor(modelItem => item.Estado)</p>
+                                    <img class="img-fluid d-block mx-auto" src="~/fotos/@Html.DisplayFor(modelItem => item.Imagem)" width="300" height="300" alt="..." />
+                                    <p>@Html.DisplayFor(modelItem => item.Sinopse)</p>
+                                    <ul class="list-inline">
+                                        <li>
+                                            <strong>Número de episódios:</strong>
+                                            @Html.DisplayFor(modelItem => item.Episodios)
+                                        </li>
+                                        <li>
+                                            <strong>Ano em que saiu:</strong>
+                                            @Html.DisplayFor(modelItem => item.Ano)
+                                        </li>
+                                        <li>
+                                            <strong>Data de publicação:</strong>
+                                            @Html.DisplayFor(modelItem => item.Data)
+                                        </li>
+                                        <li>
+                                            <strong>Estudio:</strong>
+                                            @Html.DisplayFor(modelItem => item.Estudio.Estudio)
+                                        </li>
+                                        <li>
+                                            @if (this.User.IsInRole("Gestor"))
+                                            {
+                                                <a asp-action="Edit" asp-route-id="@item.ID">Editar</a>
+                                            }
+                                                <a asp-action="Details" asp-route-id="@item.ID">Detalhes</a>
+                                            @if (this.User.IsInRole("Gestor"))
+                                            {
+                                                <a asp-action="Delete" asp-route-id="@item.ID">Apagar</a>}
+                                        </li>
+                                    </ul>
+                                    <button class="btn btn-primary btn-xl text-uppercase" data-bs-dismiss="modal" type="button">
+                                        <i class="fas fa-times me-1"></i>
+                                        Ok!
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    i++;
+        @*<tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Titulo)
             </td>
@@ -61,7 +133,7 @@
                 @Html.DisplayFor(modelItem => item.Ano)
             </td>
             <td>
-                @*Html.DisplayFor(modelItem => item.Imagem)*@
+                @*Html.DisplayFor(modelItem => item.Imagem)*@@*
                 <img src="~/fotos/@Html.DisplayFor(modelItem => item.Imagem)" width="100" alt="100"/>
             </td>
             <td>
@@ -84,7 +156,17 @@
                     </text>                
                 }
             </td>
-        </tr>
+        </tr>*@
 }
+@*
     </tbody>
-</table>
+</table>*@
+<!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="js/scripts.js"></script>
+        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+        <!-- * *                               SB Forms JS                               * *-->
+        <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
+        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+        <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
