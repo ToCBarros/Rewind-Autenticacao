@@ -7,7 +7,10 @@
 <h1>Lista de Séries</h1>
 
 <p>
-    <a asp-action="Create">Adicionar nova série</a>
+    @if (this.User.IsInRole("Gestor"))
+    {
+        <a asp-action="Create">Adicionar nova série</a>
+    }
 </p>
 <table class="table">
     <thead>
@@ -68,9 +71,18 @@
                 @Html.DisplayFor(modelItem => item.Estudio.Estudio)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Editar</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Detalhes</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Apagar</a>
+                @if (this.User.IsInRole("Gestor"))
+                {
+                    <text>
+                    <a asp-action="Edit" asp-route-id="@item.ID">Editar</a> |
+                    </text>
+                }
+                <a asp-action="Details" asp-route-id="@item.ID">Detalhes</a> 
+                @if (this.User.IsInRole("Gestor")) {
+                    <text>
+                    |<a asp-action="Delete" asp-route-id="@item.ID">Apagar</a>
+                    </text>                
+                }
             </td>
         </tr>
 }

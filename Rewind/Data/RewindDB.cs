@@ -27,7 +27,7 @@ namespace Rewind.Data
             //Roles
             modelBuilder.Entity<IdentityRole>().HasData(
                 new IdentityRole { Id = "g", Name = "Gestor", NormalizedName = "GESTOR" },
-                new IdentityRole { Id = "u", Name = "utilizador", NormalizedName = "UTILIZADOR" }
+                new IdentityRole { Id = "u", Name = "Utilizador", NormalizedName = "UTILIZADOR" }
                 );
             //Seed
             modelBuilder.Entity<Estudios>().HasData(

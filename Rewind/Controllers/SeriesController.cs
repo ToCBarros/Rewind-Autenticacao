@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -64,6 +65,7 @@ namespace Rewind.Controllers
         }
 
         // GET: Series/Create
+        [Authorize(Roles = "Gestor")]
         public IActionResult Create()
         {
             ViewData["EstudioID"] = new SelectList(_context.Estudios.OrderBy(e=>e.Estudio), "ID", "Estudio");
@@ -75,6 +77,7 @@ namespace Rewind.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Gestor")]
         public async Task<IActionResult> Create([Bind("ID,Titulo,Sinopse,Episodios,Estado,Ano,Imagem,Data,EstudioID")] Series series, IFormFile imagemserie)
         {
             //verificar se o utilizador escolheu um estudio
@@ -148,6 +151,7 @@ namespace Rewind.Controllers
         }
 
         // GET: Series/Edit/5
+        [Authorize(Roles = "Gestor")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -171,6 +175,7 @@ namespace Rewind.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Gestor")]
         public async Task<IActionResult> Edit(int id, [Bind("ID,Titulo,Sinopse,Episodios,Estado,Ano,Imagem,Data,EstudioID")] Series series, IFormFile imagemserie)
         {
             if (id != series.ID)
@@ -248,6 +253,7 @@ namespace Rewind.Controllers
         }
 
         // GET: Series/Delete/5
+        [Authorize(Roles = "Gestor")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -270,6 +276,7 @@ namespace Rewind.Controllers
         // POST: Series/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Gestor")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var series = await _context.Series.FindAsync(id);

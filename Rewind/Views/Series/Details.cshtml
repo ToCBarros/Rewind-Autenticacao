@@ -59,7 +59,11 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.ID">Editar</a> |
+    @if (this.User.IsInRole("Gestor")) { 
+        <text>
+        <a asp-action="Edit" asp-route-id="@Model.ID">Editar</a> |
+        </text>
+    }
     <a asp-action="Index">Voltar a lista</a>
 </div>
 @*É enviado o Id da série para o controlador dos comentarios para a função create

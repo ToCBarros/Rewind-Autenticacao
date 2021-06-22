@@ -49,6 +49,11 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.ID">Editar</a> |
+    @if (ViewBag.util == Model.UtilizadoresID)
+    {
+        <text>
+        <a asp-action="Edit" asp-route-id="@Model.ID">Editar</a>|
+        </text>
+    }
     <a asp-action="Index" asp-route-id="@Model.Serie.ID">Voltar aos comentários</a>
-</div>
+            </div>

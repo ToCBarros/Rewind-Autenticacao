@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -73,6 +74,7 @@ namespace Rewind.Controllers
         //}
 
         // GET: Utilizadores/Edit/5
+        [Authorize(Roles = "Gestor,Utilizador")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -96,6 +98,7 @@ namespace Rewind.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Gestor,Utilizador")]
         public async Task<IActionResult> Edit(int id, [Bind("ID,Utilizador,Email,UserName")] Utilizadores utilizadores)
         {
             if (id != utilizadores.ID)
@@ -134,6 +137,7 @@ namespace Rewind.Controllers
         }
 
         // GET: Utilizadores/Delete/5
+        [Authorize(Roles = "Gestor,Utilizador")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -154,6 +158,7 @@ namespace Rewind.Controllers
         // POST: Utilizadores/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Gestor,Utilizador")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var utilizadores = await _context.Utilizadores.FindAsync(id);

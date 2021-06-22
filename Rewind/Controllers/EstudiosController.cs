@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -48,6 +49,7 @@ namespace Rewind.Controllers
         }
 
         // GET: Estudios/Create
+        [Authorize(Roles = "Gestor")]
         public IActionResult Create()
         {
             return View();
@@ -58,6 +60,7 @@ namespace Rewind.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Gestor")]
         public async Task<IActionResult> Create([Bind("ID,Estudio,Pais")] Estudios estudios)
         {
             if (ModelState.IsValid)
@@ -70,6 +73,7 @@ namespace Rewind.Controllers
         }
 
         // GET: Estudios/Edit/5
+        [Authorize(Roles = "Gestor")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -91,6 +95,7 @@ namespace Rewind.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Gestor")]
         public async Task<IActionResult> Edit(int id, [Bind("ID,Estudio,Pais")] Estudios estudios)
         {
             if (id != estudios.ID)
@@ -128,6 +133,7 @@ namespace Rewind.Controllers
         }
 
         // GET: Estudios/Delete/5
+        [Authorize(Roles = "Gestor")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -148,6 +154,7 @@ namespace Rewind.Controllers
         // POST: Estudios/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Gestor")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var estudios = await _context.Estudios.FindAsync(id);

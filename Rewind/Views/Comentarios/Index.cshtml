@@ -38,36 +38,43 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Utilizador.Utilizador)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Serie.Titulo)
-            </td>
-            <td hidden>
-                @Html.DisplayFor(modelItem => item.Estado)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Data)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Comentario)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Estrelas)
-            </td>
-            <td>
-                @if (ViewBag.util == item.UtilizadoresID) {
-                    <text>
+        @foreach (var item in Model)
+        {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Utilizador.Utilizador)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Serie.Titulo)
+        </td>
+        <td hidden>
+            @Html.DisplayFor(modelItem => item.Estado)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Data)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Comentario)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Estrelas)
+        </td>
+        <td>
+            @if (ViewBag.util == item.UtilizadoresID)
+            {
+                <text>
                 <a asp-action="Edit" asp-route-id="@item.ID">Editar</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Detalhes</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Apagar</a>
-                    </text>
-                }
-            </td>
-        </tr>
-}
+                </text>
+            }
+                <a asp-action="Details" asp-route-id="@item.ID">Detalhes</a> 
+            @if (ViewBag.util == item.UtilizadoresID)
+            {
+                <text>
+            |<a asp-action="Delete" asp-route-id="@item.ID">Apagar</a>
+                </text>
+            }
+        </td>
+    </tr>
+    }
     </tbody>
 </table>
