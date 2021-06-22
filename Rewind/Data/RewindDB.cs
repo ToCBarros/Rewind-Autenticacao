@@ -29,6 +29,26 @@ namespace Rewind.Data
                 new IdentityRole { Id = "g", Name = "Gestor", NormalizedName = "GESTOR" },
                 new IdentityRole { Id = "u", Name = "Utilizador", NormalizedName = "UTILIZADOR" }
                 );
+
+            //create user
+            var appUser = new IdentityUser
+            {
+                Id = "ADMIN", UserName = "a@aa.com", NormalizedUserName = "A@AA.com", Email = "a@aa.com", NormalizedEmail = "A@AA.com", EmailConfirmed = true
+           };
+
+            //set user password
+            PasswordHasher<IdentityUser> ph = new PasswordHasher<IdentityUser>();
+            appUser.PasswordHash = ph.HashPassword(appUser, "Bigboss1.");
+
+            //seed user
+            modelBuilder.Entity<IdentityUser>().HasData(appUser);
+            //set user role to admin
+            modelBuilder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string>
+            {
+                RoleId = "g",
+                UserId = "ADMIN"
+            });
+
             //Seed
             modelBuilder.Entity<Estudios>().HasData(
                 new Estudios { ID = 1, Estudio = "ABC", Pais = "Portugal" },
@@ -36,9 +56,9 @@ namespace Rewind.Data
                 new Estudios { ID = 3, Estudio = "TCB", Pais = "Espanha" }
                 );
             modelBuilder.Entity<Utilizadores>().HasData(
-                new Utilizadores { ID = 1, Utilizador = "admin", Email = "a@aa" },
-                new Utilizadores { ID = 2, Utilizador = "antonio", Email = "b@bb" },
-                new Utilizadores { ID = 3, Utilizador = "tomas", Email = "c@cc" }
+                new Utilizadores { ID = 1, Utilizador = "admin", Email = "a@aa.com" ,UserName="ADMIN"},
+                new Utilizadores { ID = 2, Utilizador = "antonio", Email = "b@bb.com" , UserName="UTILIZADOR"},
+                new Utilizadores { ID = 3, Utilizador = "tomas", Email = "c@cc.com" }
                 );
             modelBuilder.Entity<Series>().HasData(
                 new Series { ID = 1, Titulo = "Lorem ipsum", Sinopse = "Morbi laoreet neque", Episodios = 1, Estado = "continuando", Ano = 2004, Imagem = "a.jpg", Data = new DateTime(2021, 6, 15), EstudioID = 1 },
