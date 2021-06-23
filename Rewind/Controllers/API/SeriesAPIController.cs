@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,10 +17,12 @@ namespace Rewind.Controllers.API
     public class SeriesAPIController : ControllerBase
     {
         private readonly RewindDB _context;
+        private readonly IWebHostEnvironment _caminho;
 
-        public SeriesAPIController(RewindDB context)
+        public SeriesAPIController(RewindDB context, IWebHostEnvironment caminho)
         {
             _context = context;
+            _caminho = caminho;
         }
 
         // GET: api/SeriesAPI
@@ -77,8 +81,31 @@ namespace Rewind.Controllers.API
         // POST: api/SeriesAPI
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Series>> PostSeries(Series series)
+        public async Task<ActionResult<Series>> PostSeries([FromForm]Series series, IFormFile imagemserie)
         {
+
+            
+
+            Guid g;
+            g = Guid.NewGuid();
+            string nomeImagem = series.Titulo + "_" + g.ToString();
+            //extensão da imagem
+            string extensao = Path.GetExtension(imagemserie.FileName).ToLower();
+            //nome final do ficheiro
+            nomeImagem = nomeImagem + extensao;
+
+            //associar o nome da foto aos dados da BD
+            series.Imagem = nomeImagem;
+
+            //armazenamento da imagem
+            string localizacaoFicheiro = _caminho.WebRootPath;
+            nomeImagem = Path.Combine(localizacaoFicheiro, "fotos", nomeImagem);
+
+            using var stream = new FileStream(nomeImagem, FileMode.Create);
+            await imagemserie.CopyToAsync(stream);
+
+
+            series.Imagem = "";
             _context.Series.Add(series);
             await _context.SaveChangesAsync();
 
