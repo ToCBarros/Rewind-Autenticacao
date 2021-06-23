@@ -96,12 +96,17 @@
                                         <li>
                                             @if (this.User.IsInRole("Gestor"))
                                             {
-                                                <a asp-action="Edit" asp-route-id="@item.ID">Editar</a>
+                                                <text>
+                                                <a asp-action="Edit" asp-route-id="@item.ID">Editar</a> |
+                                                </text>
                                             }
                                                 <a asp-action="Details" asp-route-id="@item.ID">Detalhes</a>
                                             @if (this.User.IsInRole("Gestor"))
                                             {
-                                                <a asp-action="Delete" asp-route-id="@item.ID">Apagar</a>}
+                                                <text>
+                                                | <a asp-action="Delete" asp-route-id="@item.ID">Apagar</a>
+                                                </text>
+                                            }
                                         </li>
                                     </ul>
                                     <button class="btn btn-primary btn-xl text-uppercase" data-bs-dismiss="modal" type="button">

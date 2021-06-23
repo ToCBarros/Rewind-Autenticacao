@@ -34,7 +34,6 @@ namespace Rewind.Controllers
             ViewData["util"] = utilID.ID;
             ViewData["serie"] = id;
             //Vai buscar o ID da pessoa com a conta atualmente iniciada. Vai buscar o utilizador ao qual pertence esse ID. Vai buscar pelo menos um comentario que esse utilizador tenha feito
-            
             var coment = _context.Comentarios.AsNoTracking().Where(s => s.SeriesID == id).Where(c => c.UtilizadoresID == utilID.ID).FirstOrDefault();
             //verifica se existe comentario, se existir envia um viewbag a dizer que existe se não envia a dizer que não existe
             if (coment == null)
@@ -116,7 +115,7 @@ namespace Rewind.Controllers
                     _context.Add(comentarios);
                     await _context.SaveChangesAsync();
                     //return RedirectToAction(nameof(Index));
-                    return RedirectToAction("Index", "Series");
+                    return RedirectToAction("Index", "Comentarios", new { id=comentarios.SeriesID});
                 }
                 catch (Exception ex)
                 {
@@ -164,7 +163,7 @@ namespace Rewind.Controllers
 
             if (IDComentariosEdit == null || IDComentariosEdit != comentarios.ID)
             {
-                return RedirectToAction("Index", "Series");
+                return RedirectToAction("Index", "Comentarios", new { id = comentarios.SeriesID });
             }
             var util = _userManager.GetUserId(User);
             var utilID = _context.Utilizadores.AsNoTracking().Where(u => u.UserName == util).FirstOrDefault();
@@ -189,7 +188,7 @@ namespace Rewind.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("Index", "Series");
+                return RedirectToAction("Index", "Comentarios", new { id = comentarios.SeriesID });
             }
             ViewData["SeriesID"] = new SelectList(_context.Series, "ID", "Estado", comentarios.SeriesID);
             ViewData["UtilizadoresID"] = new SelectList(_context.Utilizadores, "ID", "Email", comentarios.UtilizadoresID);
@@ -228,11 +227,11 @@ namespace Rewind.Controllers
 
             if (IDComentariosDel == null || IDComentariosDel != comentarios.ID)
             {
-                return RedirectToAction("Index", "Series");
+                return RedirectToAction("Index", "Comentarios", new { id = comentarios.SeriesID });
             }
             _context.Comentarios.Remove(comentarios);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index","Series");
+            return RedirectToAction("Index", "Comentarios", new { id = comentarios.SeriesID });
         }
 
         private bool ComentariosExists(int id)

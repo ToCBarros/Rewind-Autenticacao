@@ -60,14 +60,14 @@
             @Html.DisplayFor(modelItem => item.Estrelas)
         </td>
         <td>
-            @if (ViewBag.util == item.UtilizadoresID)
+            @if (ViewBag.util == item.UtilizadoresID && User.Identity.IsAuthenticated)
             {
                 <text>
                 <a asp-action="Edit" asp-route-id="@item.ID">Editar</a> |
                 </text>
             }
                 <a asp-action="Details" asp-route-id="@item.ID">Detalhes</a> 
-            @if (ViewBag.util == item.UtilizadoresID)
+            @if (ViewBag.util == item.UtilizadoresID && User.Identity.IsAuthenticated)
             {
                 <text>
             |<a asp-action="Delete" asp-route-id="@item.ID">Apagar</a>
