@@ -68,7 +68,7 @@ namespace Rewind.Controllers
         [Authorize(Roles = "Gestor")]
         public IActionResult Create()
         {
-            ViewData["EstudioID"] = new SelectList(_context.Estudios.OrderBy(e=>e.Estudio), "ID", "Estudio");
+            ViewData["EstudioID"] = new SelectList(_context.Estudios.OrderBy(e=>e.Estudio).Where(e=>e.Estado!="apagado"), "ID", "Estudio");
             return View();
         }
 
@@ -84,7 +84,7 @@ namespace Rewind.Controllers
             if (series.EstudioID < 0)
             {
                 ModelState.AddModelError("", "Por favor escolha um estudio");
-                ViewData["EstudioID"] = new SelectList(_context.Estudios, "ID", "Estudio", series.EstudioID);
+                ViewData["EstudioID"] = new SelectList(_context.Estudios.Where(e=>e.Estado!="apagado"), "ID", "Estudio", series.EstudioID);
                 return View(series);
             }
                 //atribui o dia e a hora atual como dia de publicação.
@@ -94,7 +94,7 @@ namespace Rewind.Controllers
             if (imagemserie==null)
             {
                 ModelState.AddModelError("", "Adicione uma fotografia da série.");
-                ViewData["EstudioID"] = new SelectList(_context.Estudios.OrderBy(e => e.Estudio), "ID", "Estudio");
+                ViewData["EstudioID"] = new SelectList(_context.Estudios.OrderBy(e => e.Estudio).Where(s => s.Estado != "apagado"), "ID", "Estudio");
                 return View(series);
             }
             else
@@ -120,7 +120,7 @@ namespace Rewind.Controllers
                 else
                 {
                     ModelState.AddModelError("", "Só pode escolher fotos");
-                    ViewData["EstudioID"] = new SelectList(_context.Estudios.OrderBy(e => e.Estudio), "ID", "Estudio");
+                    ViewData["EstudioID"] = new SelectList(_context.Estudios.OrderBy(e => e.Estudio).Where(s => s.Estado != "apagado"), "ID", "Estudio");
                     return View(series);
                 }
             }
@@ -164,7 +164,7 @@ namespace Rewind.Controllers
             {
                 return NotFound();
             }
-            ViewData["EstudioID"] = new SelectList(_context.Estudios, "ID", "Estudio", series.EstudioID);
+            ViewData["EstudioID"] = new SelectList(_context.Estudios.Where(s => s.Estado != "apagado"), "ID", "Estudio", series.EstudioID);
             
             HttpContext.Session.SetInt32("IDSerieEdicao",series.ID);
             return View(series);
@@ -216,7 +216,7 @@ namespace Rewind.Controllers
                 else
                 {
                     ModelState.AddModelError("", "Só pode escolher fotos");
-                    ViewData["EstudioID"] = new SelectList(_context.Estudios.OrderBy(e => e.Estudio), "ID", "Estudio");
+                    ViewData["EstudioID"] = new SelectList(_context.Estudios.OrderBy(e => e.Estudio).Where(s => s.Estado != "apagado"), "ID", "Estudio");
                     return View(series);
                 }
             }
@@ -248,7 +248,7 @@ namespace Rewind.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EstudioID"] = new SelectList(_context.Estudios, "ID", "Estudio", series.EstudioID);
+            ViewData["EstudioID"] = new SelectList(_context.Estudios.Where(s => s.Estado != "apagado"), "ID", "Estudio", series.EstudioID);
             return View(series);
         }
 

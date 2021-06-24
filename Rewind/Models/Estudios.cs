@@ -32,6 +32,10 @@ namespace Rewind.Models
         [Required(ErrorMessage = "Por favor escolha o nome do pais.")]
         public string Pais { get; set; }
         /// <summary>
+        /// Estudio foi apagado ou não.
+        /// </summary>
+        public string Estado { get; set; }
+        /// <summary>
         /// lista das séries associados ao estudio
         /// </summary>
         public ICollection<Series> ListaDeSeries { get; set; }

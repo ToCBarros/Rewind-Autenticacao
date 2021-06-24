@@ -27,7 +27,7 @@ namespace Rewind.Controllers
         // GET: Estudios
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Estudios.ToListAsync());
+            return View(await _context.Estudios.Where(c=>c.Estado!="apagado").ToListAsync());
         }
 
         // GET: Estudios/Details/5
@@ -164,8 +164,12 @@ namespace Rewind.Controllers
             {
                 return RedirectToAction("Index");
             }
-            _context.Estudios.Remove(estudios);
+            estudios.Estado = "apagado";
+            _context.Update(estudios);
             await _context.SaveChangesAsync();
+            /*
+            _context.Estudios.Remove(estudios);
+            await _context.SaveChangesAsync();*/
             return RedirectToAction(nameof(Index));
         }
 
