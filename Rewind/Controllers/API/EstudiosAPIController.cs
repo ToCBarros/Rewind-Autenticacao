@@ -23,10 +23,9 @@ namespace Rewind.Controllers.API
 
         // GET: api/EstudiosAPI
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<EstudiosAPIViewModel>>> GetEstudios()
+        public async Task<ActionResult<IEnumerable<Estudios>>> GetEstudios()
         {
-            //return await _context.Estudios.ToListAsync();
-            return await _context.Estudios.Select(c=> new EstudiosAPIViewModel { ID=c.ID, Estudios=c.Estudio, Pais=c.Pais}).ToListAsync();
+            return await _context.Estudios.Where(e=>e.Estado!="apagado").ToListAsync();
         }
 
         // GET: api/EstudiosAPI/5
