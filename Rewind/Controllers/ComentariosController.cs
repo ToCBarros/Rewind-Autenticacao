@@ -15,8 +15,13 @@ namespace Rewind.Controllers
 {
     public class ComentariosController : Controller
     {
+        /// <summary>
+        /// representa a Base de dados
+        /// </summary>
         private readonly RewindDB _context;
-
+        /// <summary>
+        /// esta variável recolhe os dados da pessoa q se autenticou
+        /// </summary>
         private readonly UserManager<IdentityUser> _userManager;
 
         public ComentariosController(RewindDB context, UserManager<IdentityUser> userManager)
@@ -24,12 +29,19 @@ namespace Rewind.Controllers
             _context = context;
             _userManager = userManager;
         }
-
+        /// <summary>
+        /// Mostra uma lista de comentários se uma série
+        /// </summary>
+        /// <param name="id">id da série</param>
+        /// <returns></returns>
         // GET: Comentarios
         public async Task<IActionResult> Index(int id)
         {
+            //vai buscar todos os comentários de uma série
             var rewindDB = _context.Comentarios.Include(u => u.Utilizador).Include(c => c.Serie).Where(c=>c.Serie.ID==id);
+            //vai buscar o Id da pessoa autenticada
             var util = _userManager.GetUserId(User);
+            //vai buscar o utilizador ao qual username é igual ao id do utilizador
             var utilID = _context.Utilizadores.AsNoTracking().Where(u => u.UserName == util).FirstOrDefault();
             ViewData["util"] = utilID.ID;
             ViewData["serie"] = id;
@@ -46,24 +58,30 @@ namespace Rewind.Controllers
             }
             return View(await rewindDB.ToListAsync());
         }
-
+        /// <summary>
+        /// vai buscar os detalhes do comentário
+        /// </summary>
+        /// <param name="id">id do comentário</param>
+        /// <returns></returns>
         // GET: Comentarios/Details/5
-        
         public async Task<IActionResult> Details(int? id)
         {
+            //verifica se o id do comentário está a null
             if (id == null)
             {
                 return NotFound();
             }
-
+            //vai buscar os dados do comentário 
             var comentarios = await _context.Comentarios
                 .Include(c => c.Serie)
                 .Include(c => c.Utilizador)
                 .FirstOrDefaultAsync(m => m.ID == id);
+            //se não existir retorna null
             if (comentarios == null)
             {
                 return NotFound();
             }
+            //coloca o ID do utilizador numa viewbag e envia para a view
             var util = _userManager.GetUserId(User);
             var utilID = _context.Utilizadores.AsNoTracking().Where(u => u.UserName == util).FirstOrDefault();
             ViewData["util"] = utilID.ID;
@@ -78,8 +96,12 @@ namespace Rewind.Controllers
             return View();
         }
         */
+        /// <summary>
+        /// cria um comentário sobre uma série
+        /// </summary>
+        /// <param name="id">id da série</param>
+        /// <returns></returns>
         // GET: Comentarios/Create
-
         //é recebido o id da série
         [Authorize(Roles = "Gestor,Utilizador")]
         public IActionResult Create(int id)
@@ -101,18 +123,22 @@ namespace Rewind.Controllers
         [Authorize(Roles = "Gestor,Utilizador")]
         public async Task<IActionResult> Create([Bind("ID,UtilizadoresID,SeriesID,Estado,Data,Comentario,Estrelas")] Comentarios comentarios)
         {
+            //devido a uma razão que não percebemos o ID do comentário tem que ser inserido com 0
             comentarios.ID = 0;
+            //preparação dos dados automáticos
             var util = _userManager.GetUserId(User);
             var utilID = _context.Utilizadores.AsNoTracking().Where(u => u.UserName == util).FirstOrDefault();
             comentarios.UtilizadoresID=utilID.ID;
             comentarios.Estado = "visivel";
             comentarios.Data = DateTime.Now;
+            //verifica se o model está valido para adicionar os dados
             if (ModelState.IsValid)
             {
                 try
                 {
-
+                    //adiciona os dados dos comentários
                     _context.Add(comentarios);
+                    //faz commit dos dados na base de dados
                     await _context.SaveChangesAsync();
                     //return RedirectToAction(nameof(Index));
                     return RedirectToAction("Index", "Comentarios", new { id=comentarios.SeriesID});
@@ -122,11 +148,17 @@ namespace Rewind.Controllers
 
                 }
             }
+            //se não for válido volta para a view de criação de comentários
             ViewData["SeriesID"] = new SelectList(_context.Series, "ID", "Estado", comentarios.SeriesID);
             ViewData["UtilizadoresID"] = new SelectList(_context.Utilizadores, "ID", "Email", comentarios.UtilizadoresID);
             return View(comentarios);
         }
 
+        /// <summary>
+        /// Permite a edição dos dados do comentário
+        /// </summary>
+        /// <param name="id">id do comentário</param>
+        /// <returns></returns>
         // GET: Comentarios/Edit/5
         [Authorize(Roles = "Gestor,Utilizador")]
         public async Task<IActionResult> Edit(int? id)
@@ -135,7 +167,7 @@ namespace Rewind.Controllers
             {
                 return NotFound();
             }
-
+            //procura o comentário ao qual é recebido o ID
             var comentarios = await _context.Comentarios.FindAsync(id);
             if (comentarios == null)
             {
@@ -159,12 +191,14 @@ namespace Rewind.Controllers
             {
                 return NotFound();
             }
+            //verifica se o utilizador não fez batota
             var IDComentariosEdit = HttpContext.Session.GetInt32("IDComentariosEdicao");
 
             if (IDComentariosEdit == null || IDComentariosEdit != comentarios.ID)
             {
                 return RedirectToAction("Index", "Comentarios", new { id = comentarios.SeriesID });
             }
+            //atribui o ID do utilizador autenticado ao comentário
             var util = _userManager.GetUserId(User);
             var utilID = _context.Utilizadores.AsNoTracking().Where(u => u.UserName == util).FirstOrDefault();
             comentarios.UtilizadoresID = utilID.ID;
@@ -172,6 +206,7 @@ namespace Rewind.Controllers
             {
                 try
                 {
+                    //vai buscar o comentário sem alterar os registos de pesquisa para colocar a Data de publicação antiga
                     var coment = _context.Comentarios.AsNoTracking().Where(p => p.ID == comentarios.ID).FirstOrDefault();
                     comentarios.Data = coment.Data;
                     _context.Update(comentarios);
@@ -194,7 +229,11 @@ namespace Rewind.Controllers
             ViewData["UtilizadoresID"] = new SelectList(_context.Utilizadores, "ID", "Email", comentarios.UtilizadoresID);
             return View(comentarios);
         }
-
+        /// <summary>
+        /// Eliminar os dados da base de dados
+        /// </summary>
+        /// <param name="id">id do comentário</param>
+        /// <returns></returns>
         // GET: Comentarios/Delete/5
         [Authorize(Roles = "Gestor,Utilizador")]
         public async Task<IActionResult> Delete(int? id)
@@ -203,7 +242,7 @@ namespace Rewind.Controllers
             {
                 return NotFound();
             }
-
+            //vai buscar os dados do comentário para enviar ao utilizador
             var comentarios = await _context.Comentarios
                 .Include(c => c.Serie)
                 .Include(c => c.Utilizador)
@@ -215,7 +254,11 @@ namespace Rewind.Controllers
             HttpContext.Session.SetInt32("IDComentariosDelete", comentarios.ID);
             return View(comentarios);
         }
-
+        /// <summary>
+        /// confirmação de apagar o comentário
+        /// </summary>
+        /// <param name="id">id do comentário</param>
+        /// <returns></returns>
         // POST: Comentarios/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

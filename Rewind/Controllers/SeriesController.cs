@@ -25,6 +25,9 @@ namespace Rewind.Controllers
         /// caminho para os dados web no server
         /// </summary>
         private readonly IWebHostEnvironment _caminho;
+        /// <summary>
+        /// esta variável recolhe os dados da pessoa q se autenticou
+        /// </summary>
         private readonly UserManager<IdentityUser> _userManager;
 
         public SeriesController(RewindDB context, IWebHostEnvironment caminho, UserManager<IdentityUser> userManager)
