@@ -76,7 +76,7 @@ namespace Rewind.Controllers.API
         // POST: api/EstudiosAPI
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Estudios>> PostEstudios(Estudios estudios)
+        public async Task<ActionResult<Estudios>> PostEstudios([FromForm]Estudios estudios)
         {
             _context.Estudios.Add(estudios);
             await _context.SaveChangesAsync();
