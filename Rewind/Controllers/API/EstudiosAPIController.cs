@@ -45,7 +45,7 @@ namespace Rewind.Controllers.API
         // PUT: api/EstudiosAPI/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutEstudios(int id, Estudios estudios)
+        public async Task<IActionResult> PutEstudios(int id, [FromForm]Estudios estudios)
         {
             if (id != estudios.ID)
             {
