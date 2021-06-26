@@ -10,6 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
+        @*o multipart/forma-data permite enviar ficheiros para o servidor*@
         <form asp-action="Edit" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ID" />
@@ -41,6 +42,7 @@
             <div class="form-group">
                 <label asp-for="Imagem" class="control-label"></label>
                 @*@<input asp-for="Imagem" class="form-control" />*@
+                @*Cria um input ficheiro, para que so sejam aceites ficheiros*@
                 <input type="file" name="imagemserie" accept=".jpg,.jpeg,.png" style="color:blue;" />
                 <span asp-validation-for="Imagem" class="text-danger"></span>
             </div>

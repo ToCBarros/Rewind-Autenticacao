@@ -10,6 +10,9 @@ using Rewind.Models;
 
 namespace Rewind.Controllers.API
 {
+    /// <summary>
+    /// api dos estudios
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class EstudiosAPIController : ControllerBase

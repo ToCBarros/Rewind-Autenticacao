@@ -41,6 +41,7 @@
             <div class="form-group">
                 <label asp-for="Imagem" class="control-label"></label>
                 @*<input asp-for="Imagem" class="form-control" />*@
+                @*Cria um input do tipo de ficheiro, para que só aceite ficheiros*@
                 <input type="file" name="imagemserie" accept=".jpg,.jpeg,.png" style="color:blue;" />
                 <span asp-validation-for="Imagem" class="text-danger"></span>
             </div>

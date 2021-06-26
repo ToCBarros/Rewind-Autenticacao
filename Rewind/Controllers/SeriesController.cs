@@ -36,7 +36,10 @@ namespace Rewind.Controllers
             _caminho = caminho;
             _userManager = userManager;
         }
-
+        /// <summary>
+        /// lista de todas as séries
+        /// </summary>
+        /// <returns></returns>
         // GET: Series
         public async Task<IActionResult> Index()
         {
@@ -44,7 +47,11 @@ namespace Rewind.Controllers
             var rewindDB = _context.Series.Include(s => s.Estudio);
             return View(await rewindDB.ToListAsync());
         }
-
+        /// <summary>
+        /// envia para a view os detalhes da serie
+        /// </summary>
+        /// <param name="id">id da serie</param>
+        /// <returns></returns>
         // GET: Series/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -66,15 +73,24 @@ namespace Rewind.Controllers
             //ViewData["util"] = utilID.ID;
             return View(series);
         }
-
+        /// <summary>
+        /// criar as séries
+        /// </summary>
+        /// <returns></returns>
         // GET: Series/Create
         [Authorize(Roles = "Gestor")]
         public IActionResult Create()
         {
+            //vai buscar todas os estudios que não estejam apagados e envia para a view
             ViewData["EstudioID"] = new SelectList(_context.Estudios.OrderBy(e=>e.Estudio).Where(e=>e.Estado!="apagado"), "ID", "Estudio");
             return View();
         }
-
+        /// <summary>
+        /// criador das series
+        /// </summary>
+        /// <param name="series">detalhes das series</param>
+        /// <param name="imagemserie">ficheiro vindo da view</param>
+        /// <returns></returns>
         // POST: Series/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -92,7 +108,7 @@ namespace Rewind.Controllers
             }
                 //atribui o dia e a hora atual como dia de publicação.
                 series.Data = DateTime.Now;
-            string nomeImagem = "";
+                string nomeImagem = "";
             //verificar se recebeu ficheiro
             if (imagemserie==null)
             {
@@ -102,11 +118,13 @@ namespace Rewind.Controllers
             }
             else
             {
+                //verifica se é uma imagem jpg ou png
                 if (imagemserie.ContentType == "image/jpeg" || imagemserie.ContentType == "image/png")
                 {
-                    
+                    //criar uma string para o nome da imagem não se repetir na pasta das fotos
                     Guid g;
                     g = Guid.NewGuid();
+                    //coloca no nome da imagem com o titulo e com a string
                     nomeImagem = series.Titulo+"_"+g.ToString();
                     //extensão da imagem
                     string extensao = Path.GetExtension(imagemserie.FileName).ToLower();
@@ -127,12 +145,14 @@ namespace Rewind.Controllers
                     return View(series);
                 }
             }
-            
+            //se o modelo for valido
                 if (ModelState.IsValid)
                 {
                     try
                     {
+                        //adiciona a serie
                         _context.Add(series);
+                        //atualiza a base de dados
                         await _context.SaveChangesAsync();
 
                         //guardar no disco rigido do server a imagem
@@ -152,27 +172,39 @@ namespace Rewind.Controllers
                 return View(series);
             
         }
-
+        /// <summary>
+        /// editar os dados da serie
+        /// </summary>
+        /// <param name="id">id da serie</param>
+        /// <returns></returns>
         // GET: Series/Edit/5
         [Authorize(Roles = "Gestor")]
         public async Task<IActionResult> Edit(int? id)
         {
+            //verifica se o id da serie é null
             if (id == null)
             {
                 return NotFound();
             }
-
+            //vai buscar os dados da serie
             var series = await _context.Series.FindAsync(id);
             if (series == null)
             {
                 return NotFound();
             }
+            //vai buscar os dados dos estudios para enviar para a view onde o estudio não foi apagado
             ViewData["EstudioID"] = new SelectList(_context.Estudios.Where(s => s.Estado != "apagado"), "ID", "Estudio", series.EstudioID);
-            
+            //guarda numa variavel de sessão o id da serie para verificar se o utilizador não tenta fazer batota
             HttpContext.Session.SetInt32("IDSerieEdicao",series.ID);
             return View(series);
         }
-
+        /// <summary>
+        /// editar a serie
+        /// </summary>
+        /// <param name="id">id da serie</param>
+        /// <param name="series">dados da serie</param>
+        /// <param name="imagemserie">ficheiro vindo da view</param>
+        /// <returns></returns>
         // POST: Series/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -181,11 +213,12 @@ namespace Rewind.Controllers
         [Authorize(Roles = "Gestor")]
         public async Task<IActionResult> Edit(int id, [Bind("ID,Titulo,Sinopse,Episodios,Estado,Ano,Imagem,Data,EstudioID")] Series series, IFormFile imagemserie)
         {
+            //se o id for diferente do id da serie
             if (id != series.ID)
             {
                 return NotFound();
             }
-
+            //verifica a variavel de sessão do id da serie para verificar se o utilizador não tenta fazer batota
             var IDSerieEdit = HttpContext.Session.GetInt32("IDSerieEdicao");
 
             if (IDSerieEdit == null || IDSerieEdit!=series.ID)
@@ -198,8 +231,10 @@ namespace Rewind.Controllers
             {
                 if (imagemserie.ContentType == "image/jpeg" || imagemserie.ContentType == "image/png")
                 {
+                    //criar uma string para o nome da imagem não se repetir na pasta das fotos
                     Guid g;
                     g = Guid.NewGuid();
+                    //coloca no nome da imagem com o titulo e com a string
                     nomeImagem = series.Titulo + "_" + g.ToString();
                     //extensão da imagem
                     string extensao = Path.GetExtension(imagemserie.FileName).ToLower();
@@ -230,9 +265,12 @@ namespace Rewind.Controllers
             {
                 try
                 {
+                    //atualiza os dados da serie
                     _context.Update(series);
+                    //guardar os dados na base de dados
                     await _context.SaveChangesAsync();
                     //guardar no disco rigido do server a imagem
+                    //se o ficheiro nao for null
                     if (imagemserie != null) {
                         using var stream = new FileStream(nomeImagem, FileMode.Create);
                         await imagemserie.CopyToAsync(stream);
@@ -254,16 +292,21 @@ namespace Rewind.Controllers
             ViewData["EstudioID"] = new SelectList(_context.Estudios.Where(s => s.Estado != "apagado"), "ID", "Estudio", series.EstudioID);
             return View(series);
         }
-
+        /// <summary>
+        /// apagar a serie
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // GET: Series/Delete/5
         [Authorize(Roles = "Gestor")]
         public async Task<IActionResult> Delete(int? id)
         {
+            //se o id for null
             if (id == null)
             {
                 return NotFound();
             }
-
+            //vai buscar os dados da serie a qual corresponde esse id
             var series = await _context.Series
                 .Include(s => s.Estudio)
                 .FirstOrDefaultAsync(m => m.ID == id);
@@ -271,18 +314,25 @@ namespace Rewind.Controllers
             {
                 return NotFound();
             }
+            //guarda numa variavel de sessão o id da serie para verificar se o utilizador não tenta fazer batota
             HttpContext.Session.SetInt32("IDSerieDelete", series.ID);
 
             return View(series);
         }
-
+        /// <summary>
+        /// apaga da base de dados a serie
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // POST: Series/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Gestor")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            //vai buscar a serie a qual pertence esse id
             var series = await _context.Series.FindAsync(id);
+            //verifica a variavel de sessão do id da serie para verificar se o utilizador não tenta fazer batota
             var IDSerieDel = HttpContext.Session.GetInt32("IDSerieDelete");
 
             if (IDSerieDel == null || IDSerieDel != series.ID)
@@ -294,7 +344,9 @@ namespace Rewind.Controllers
                 //apagar a foto do disco rigido
                 string localizacaoFicheiro = _caminho.WebRootPath;
                 System.IO.File.Delete(Path.Combine(localizacaoFicheiro, "fotos", series.Imagem));
+                //apaga a serie
                 _context.Series.Remove(series);
+                //guarda as alterações na base de dados
                 await _context.SaveChangesAsync();
             }
             catch (Exception)

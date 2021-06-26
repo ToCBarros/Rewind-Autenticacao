@@ -7,6 +7,7 @@
 <h1>Lista de estudios</h1>
 
 <p>
+    @*Verifica se o utilizador é gestor*@
     @if (this.User.IsInRole("Gestor"))
     {
 <a asp-action="Create">Adicionar novo estudio</a>
@@ -34,6 +35,7 @@
                 @Html.DisplayFor(modelItem => item.Pais)
             </td>
             <td>
+                @*Verifica se o utilizador é gestor*@
                 @if (this.User.IsInRole("Gestor"))
                 {
                     <text>

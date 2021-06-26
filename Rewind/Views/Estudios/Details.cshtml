@@ -25,6 +25,7 @@
     </dl>
 </div>
 <div>
+    @*verifica se o utilizador é gestor*@
     @if (this.User.IsInRole("Gestor")) {
         <text>
         <a asp-action="Edit" asp-route-id="@Model.ID">Editar</a> |

@@ -49,6 +49,7 @@
     </dl>
 </div>
 <div>
+    @*verifica se o comentario pertence ao utilizador autenticado*@
     @if (ViewBag.util == Model.UtilizadoresID && User.Identity.IsAuthenticated)
     {
         <text>

@@ -7,7 +7,7 @@
 <h1>Lista de Comentarios</h1>
 
 <p>
-@*É enviado o Id da série para o controlador dos comentarios para a função create*@
+@*É verificado se o utilizador autenticado ja comentou esta série*@
 @if (User.Identity.IsAuthenticated && ViewBag.ex == "nexiste")
 {
 <a asp-action="Create" asp-controller="Comentarios" asp-route-id="@ViewBag.serie">Adicionar um comentário</a><br />
@@ -60,19 +60,19 @@
             @Html.DisplayFor(modelItem => item.Estrelas)
         </td>
         <td>
+            @*Verifica se este comentario pertence ao utilizador autenticado*@
             @if (ViewBag.util == item.UtilizadoresID && User.Identity.IsAuthenticated)
             {
-                <text>
-                <a asp-action="Edit" asp-route-id="@item.ID">Editar</a> |
-                </text>
-            }
-                <a asp-action="Details" asp-route-id="@item.ID">Detalhes</a> 
+        <text>
+            <a asp-action="Edit" asp-route-id="@item.ID">Editar</a> |
+        </text>}
+            <a asp-action="Details" asp-route-id="@item.ID">Detalhes</a>
+            @*Verifica se este comentario pertence ao utilizador autenticado*@
             @if (ViewBag.util == item.UtilizadoresID && User.Identity.IsAuthenticated)
             {
-                <text>
+        <text>
             |<a asp-action="Delete" asp-route-id="@item.ID">Apagar</a>
-                </text>
-            }
+        </text>}
         </td>
     </tr>
     }

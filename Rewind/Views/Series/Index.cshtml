@@ -2,13 +2,16 @@
 
 @{
     ViewData["Title"] = "Séries";
+    //é adicionado um contador para a criação das séries
     int i = 1;
+    //é adicionado uma string com o nome do componente
     string nome = "#portfolioModal";
 }
 
 <h1>Lista de Séries</h1>
 
 <p>
+    @*Verifica se o utilizador autenticado é um gestor*@
     @if (this.User.IsInRole("Gestor"))
     {
         <a asp-action="Create">Adicionar nova série</a>
@@ -47,6 +50,7 @@
     </thead>
     <tbody>*@
 @foreach (var item in Model) {
+    //coloca o nome do componente
     nome = "#portfolioModal";
     <div class="col-lg-4 col-sm-6 mb-4">
         <div class="portfolio-item">
@@ -61,7 +65,7 @@
                             </div>
                         </div><br />
     </div>    
-    
+        //coloca o nome do componente
         nome = "portfolioModal";
     
     <div class="portfolio-modal modal fade" id="@nome@i" tabindex="-1" role="dialog" aria-hidden="true">

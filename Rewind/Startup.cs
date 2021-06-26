@@ -43,7 +43,7 @@ namespace Rewind
 
 
             
-            services.AddDefaultIdentity<IdentityUser>(options =>
+            services.AddDefaultIdentity<IdentityUser>(options =>            //permite a utilização de roles
                             options.SignIn.RequireConfirmedAccount = true).AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<RewindDB>();
             services.AddControllersWithViews();

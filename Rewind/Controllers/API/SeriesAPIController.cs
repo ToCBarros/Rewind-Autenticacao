@@ -12,6 +12,9 @@ using Rewind.Models;
 
 namespace Rewind.Controllers.API
 {
+    /// <summary>
+    /// api das series
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class SeriesAPIController : ControllerBase

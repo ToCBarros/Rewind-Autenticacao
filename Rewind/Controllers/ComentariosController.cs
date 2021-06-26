@@ -30,7 +30,7 @@ namespace Rewind.Controllers
             _userManager = userManager;
         }
         /// <summary>
-        /// Mostra uma lista de comentários se uma série
+        /// Mostra uma lista de comentários se um comentario
         /// </summary>
         /// <param name="id">id da série</param>
         /// <returns></returns>

@@ -42,6 +42,7 @@
             @Html.DisplayNameFor(model => model.Imagem)
         </dt>
         <dd class="col-sm-10">
+            @*Mostra a foto da série*@
             <img src="~/fotos/@Html.DisplayFor(model => model.Imagem)" width="100" alt="100" />
         </dd>
         <dt class="col-sm-2">
@@ -59,6 +60,7 @@
     </dl>
 </div>
 <div>
+    @*Verifica se o utilizador é gestor*@
     @if (this.User.IsInRole("Gestor")) { 
         <text>
         <a asp-action="Edit" asp-route-id="@Model.ID">Editar</a> |
